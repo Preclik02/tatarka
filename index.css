@@ -1,0 +1,62 @@
+body{
+    background-color: rgb(68, 68, 68);
+    color: white;
+}
+#cislo{
+    text-align: center;
+}
+#add{
+    border-radius: 15px;
+    align-content: center;
+    position: relative;
+    left: 840px;
+    
+}
+#tatarka{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    font-size: 25px;
+}
+#auto_tatarka{
+    width: 200px;
+    font-size: 30px;
+    border-radius: 15px;
+    position: absolute;
+    left: 50px;
+    top: 20px;
+}
+#tatarka_boost{
+    width: 200px;
+    font-size: 30px;
+    border-radius: 15px;
+    position: absolute;
+    left: 50px;
+    top: 100px;
+}
+#upgrades{
+    background-color: black;
+    width: 300px;
+    height: 500px;
+    position: relative;
+    left: 100px;
+    border-radius: 15px;
+    top: -100px;
+}
+
+@media (max-width : 768px) {
+    #add{
+        position: relative;
+        left: 0%;
+        right: 0%;
+    }
+    #cislo{
+        position: relative;
+        left: 85px;
+    }   
+    #upgrades{
+        position: relative;
+        left: 25px;
+        top: 50px;
+    }
+}
