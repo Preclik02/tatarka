@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(68, 68, 68);
+    background-color: rgb(80, 80, 80);
     color: white;
 }
 #cislo{
@@ -10,7 +10,11 @@ body{
     align-content: center;
     position: relative;
     left: 840px;
-    
+    top: 100px;
+    transition: transform 0.5s ease-in-out;
+}
+#add:hover{
+    transform: scale(1.4);
 }
 #tatarka{
     position: fixed;
@@ -32,12 +36,20 @@ body{
     border-radius: 15px;
     position: absolute;
     left: 50px;
-    top: 100px;
+    top: 200px;
+}
+#golden_tataka{
+    width: 200px;
+    font-size: 30px;
+    border-radius: 15px;
+    position: absolute;
+    left: 50px;
+    top: 400px;
 }
 #upgrades{
     background-color: black;
     width: 300px;
-    height: 500px;
+    height: 600px;
     position: relative;
     left: 100px;
     border-radius: 15px;
@@ -47,16 +59,21 @@ body{
 @media (max-width : 768px) {
     #add{
         position: relative;
-        left: 0%;
+        left: 60px;
         right: 0%;
     }
     #cislo{
         position: relative;
-        left: 85px;
+        left: -70px;
+        top: 50px;
     }   
     #upgrades{
         position: relative;
         left: 25px;
-        top: 50px;
+        top: 200px;
+    }
+    #tatarka_boost{
+        position: absolute;
+        top: 200px;
     }
 }
