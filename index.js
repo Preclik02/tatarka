@@ -72,7 +72,7 @@ document.getElementById("tatarka_boost").onclick = function () {
     if (curency >= tatarkaBoostCost) {
         curency -= tatarkaBoostCost;
         clickBoost *= 2;
-        tatarkaBoostCost = Math.floor(tatarkaBoostCost * 2.5);
+        tatarkaBoostCost = Math.floor(tatarkaBoostCost * 3);
 
         updateUI();
         saveProgress();
