@@ -1,10 +1,10 @@
 let number = 0;
 let curency = 0;
 let autoTatarkaCount = 0;
-let autoTatarkaCost = 500; // Initial cost set to 500
+let autoTatarkaCost = 500;
 let clickBoost = 1;
 let tatarkaBoostCost = 50;
-let goldenTatarkaPurchased = false;  // To track if Golden Tatarka has been purchased
+let goldenTatarkaCost = 1000000000000; // Initial rebirth cost
 
 window.onload = function () {
     let savedNumber = localStorage.getItem("number");
@@ -13,42 +13,21 @@ window.onload = function () {
     let savedAutoTatarkaCost = localStorage.getItem("autoTatarkaCost");
     let savedClickBoost = localStorage.getItem("clickBoost");
     let savedTatarkaBoostCost = localStorage.getItem("tatarkaBoostCost");
-    let savedGoldenTatarkaPurchased = localStorage.getItem("goldenTatarkaPurchased");
+    let savedGoldenTatarkaCost = localStorage.getItem("goldenTatarkaCost");
 
-    if (savedNumber !== null) {
-        number = parseInt(savedNumber);
-        document.getElementById("cislo").textContent = "Pocet: " + number;
+    if (savedNumber !== null) number = parseInt(savedNumber);
+    if (savedCurency !== null) curency = parseInt(savedCurency);
+    if (savedAutoTatarkaCount !== null) autoTatarkaCount = parseInt(savedAutoTatarkaCount);
+    if (savedAutoTatarkaCost !== null) autoTatarkaCost = parseInt(savedAutoTatarkaCost);
+    if (savedClickBoost !== null) clickBoost = parseInt(savedClickBoost);
+    if (savedTatarkaBoostCost !== null) tatarkaBoostCost = parseInt(savedTatarkaBoostCost);
+    if (savedGoldenTatarkaCost !== null) goldenTatarkaCost = parseInt(savedGoldenTatarkaCost);
+
+    for (let i = 0; i < autoTatarkaCount; i++) {
+        startAutoTatarka();
     }
 
-    if (savedCurency !== null) {
-        curency = parseInt(savedCurency);
-        document.getElementById("tatarka").textContent = "Tatarek: " + curency;
-    }
-
-    if (savedAutoTatarkaCount !== null) {
-        autoTatarkaCount = parseInt(savedAutoTatarkaCount);
-        for (let i = 0; i < autoTatarkaCount; i++) {
-            startAutoTatarka();
-        }
-    }
-
-    if (savedAutoTatarkaCost !== null) {
-        autoTatarkaCost = parseInt(savedAutoTatarkaCost);
-    }
-
-    if (savedClickBoost !== null) {
-        clickBoost = parseInt(savedClickBoost);
-    }
-
-    if (savedTatarkaBoostCost !== null) {
-        tatarkaBoostCost = parseInt(savedTatarkaBoostCost);
-    }
-
-    if (savedGoldenTatarkaPurchased !== null) {
-        goldenTatarkaPurchased = savedGoldenTatarkaPurchased === 'true';  // Convert to boolean
-    }
-
-    updateButtonText();
+    updateUI();
 };
 
 function saveProgress() {
@@ -58,21 +37,21 @@ function saveProgress() {
     localStorage.setItem("autoTatarkaCost", autoTatarkaCost);
     localStorage.setItem("clickBoost", clickBoost);
     localStorage.setItem("tatarkaBoostCost", tatarkaBoostCost);
-    localStorage.setItem("goldenTatarkaPurchased", goldenTatarkaPurchased);
+    localStorage.setItem("goldenTatarkaCost", goldenTatarkaCost);
 }
 
 document.getElementById("add").onclick = function () {
     number += clickBoost;
     curency += clickBoost;
-    document.getElementById("cislo").textContent = "Pocet: " + number;
-    document.getElementById("tatarka").textContent = "Tatarek: " + curency;
+    updateUI();
     saveProgress();
 };
 
+// Auto Tatarka now gives +10 per second instead of +1
 function startAutoTatarka() {
     setInterval(function () {
-        curency += 1;
-        document.getElementById("tatarka").textContent = "Tatarek: " + curency;
+        curency += 25; // Increased auto value from 1 to 10
+        updateUI();
         saveProgress();
     }, 1000);
 }
@@ -81,12 +60,11 @@ document.getElementById("auto_tatarka").onclick = function () {
     if (curency >= autoTatarkaCost) {
         curency -= autoTatarkaCost;
         autoTatarkaCount++;
-        autoTatarkaCost *= 3;  // Increase the cost by multiplying by 3
+        autoTatarkaCost *= 3; // Cost increases
 
-        document.getElementById("tatarka").textContent = "Tatarek: " + curency;
-        saveProgress();
         startAutoTatarka();
-        updateButtonText();
+        updateUI();
+        saveProgress();
     }
 };
 
@@ -96,40 +74,53 @@ document.getElementById("tatarka_boost").onclick = function () {
         clickBoost *= 2;
         tatarkaBoostCost = Math.floor(tatarkaBoostCost * 2.5);
 
-        document.getElementById("tatarka").textContent = "Tatarek: " + curency;
+        updateUI();
         saveProgress();
-        updateButtonText();
     }
 };
 
+// Golden Tatarka (Rebirth) - Can be rebought, cost increases by 1 trillion each time
 document.getElementById("golden_tataka").onclick = function () {
-    if (curency >= 1000000000000 && !goldenTatarkaPurchased) { // Check if Golden Tatarka is affordable and not yet purchased
-        curency -= 1000000000000; // Deduct 1 trillion Tatarek
-        goldenTatarkaPurchased = true;
+    if (curency >= goldenTatarkaCost) {
+        curency -= goldenTatarkaCost;
+        goldenTatarkaCost += 100000000000000; // Increase cost by 1 trillion
 
-        // Reset everything and apply 100x boost
+        // Reset all values but keep increasing click power
         number = 0;
         autoTatarkaCount = 0;
         autoTatarkaCost = 500;
-        clickBoost = 100;  // Set clickBoost to 100x
-        tatarkaBoostCost = 50;  // Reset tatarkaBoostCost
+        clickBoost *= 100;
+        tatarkaBoostCost = 50;
+        curency = 0;
 
-        document.getElementById("cislo").textContent = "Pocet: " + number;
-        document.getElementById("tatarka").textContent = "Tatarek: " + curency;
-
+        updateUI();
         saveProgress();
-        updateButtonText();
-        alert("Congratulations! You've purchased Golden Tatarka. All your progress has reset, but you now have a 100x boost!");
-    } else if (goldenTatarkaPurchased) {
-        alert("You already purchased the Golden Tatarka!");
+        alert(`You've purchased Golden Tatarka! Your click boost is now ${clickBoost}×, and the next one costs ${goldenTatarkaCost}!`);
     } else {
-        alert("You need 1 trillion Tatarek to purchase Golden Tatarka!");
+        alert(`You need ${goldenTatarkaCost} Tatarek to purchase Golden Tatarka!`);
     }
 };
 
-function updateButtonText() {
+// Reset Button: Clears **everything** including rebirths
+document.getElementById("reset").onclick = function () {
+    number = 0;
+    curency = 0;
+    autoTatarkaCount = 0;
+    autoTatarkaCost = 500;
+    clickBoost = 1;
+    tatarkaBoostCost = 50;
+    goldenTatarkaCost = 1000000000000; // Reset rebirth cost
+
+    localStorage.clear(); // Clear all saved progress
+
+    updateUI();
+    alert("Game progress has been reset!");
+};
+
+function updateUI() {
+    document.getElementById("cislo").textContent = "Pocet: " + number;
+    document.getElementById("tatarka").textContent = "Tatarek: " + curency;
     document.getElementById("auto_tatarka").textContent = `Auto Tatarka (Cost: ${autoTatarkaCost})`;
     document.getElementById("tatarka_boost").textContent = `Tatarka Booster (Cost: ${tatarkaBoostCost})`;
-    document.getElementById("golden_tataka").textContent = `GOLDEN TATARKA (Cost: 1 Trillion)`;
+    document.getElementById("golden_tataka").textContent = `GOLDEN TATARKA (Cost: ${goldenTatarkaCost})`;
 }
-
