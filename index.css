@@ -3,7 +3,10 @@ body{
     color: white;
 }
 #cislo{
-    text-align: center;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    font-size: 25px;
 }
 #add{
     border-radius: 15px;
@@ -17,13 +20,14 @@ body{
     transform: scale(1.4);
 }
 #tatarka{
-    position: fixed;
-    top: 0px;
-    left: 0px;
+    text-align: center;
+    top: -250px;
+    position: relative;
     font-size: 25px;
 }
 #auto_tatarka{
-    width: 200px;
+    width: 400px;
+    height: 150px;
     font-size: 30px;
     border-radius: 15px;
     position: absolute;
@@ -31,7 +35,8 @@ body{
     top: 20px;
 }
 #tatarka_boost{
-    width: 200px;
+    width: 400px;
+    height: 150px;
     font-size: 30px;
     border-radius: 15px;
     position: absolute;
@@ -39,7 +44,8 @@ body{
     top: 200px;
 }
 #golden_tataka{
-    width: 200px;
+    width: 400px;
+    height: 150px;
     font-size: 30px;
     border-radius: 15px;
     position: absolute;
@@ -48,12 +54,17 @@ body{
 }
 #upgrades{
     background-color: black;
-    width: 300px;
+    width: 500px;
     height: 600px;
     position: relative;
     left: 100px;
     border-radius: 15px;
-    top: -100px;
+    top: -200px;
+}
+#reset{
+    position: relative;
+    top: 400px;
+    left: 620px;
 }
 
 @media (max-width : 768px) {
@@ -64,16 +75,42 @@ body{
     }
     #cislo{
         position: relative;
-        left: -70px;
-        top: 50px;
+        left: 130px;
+        top: 20px;
     }   
     #upgrades{
         position: relative;
-        left: 25px;
+        height: 600px;
+        width: 350px;
+        left: 5px;
         top: 200px;
     }
     #tatarka_boost{
         position: absolute;
-        top: 200px;
+        top: 220px;
+        left: 25px;
+        height: 100px;
+        width: 300px;
+    }
+    #auto_tatarka{
+        position: absolute;
+        top: 50px;
+        left: 25px;
+        height: 100px;
+        width: 300px;
+    }
+    #golden_tataka{
+        position: absolute;
+        top: 400px;
+        left: 25px;
+        width: 300px;
+    }
+    #reset{
+        position: relative;
+        left: 0px;
+        top: 900px;
+        width: 350px;
+        border-radius: 15px;
+        height: 50px;
     }
 }
