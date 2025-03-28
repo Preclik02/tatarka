@@ -89,7 +89,7 @@ document.getElementById("golden_tataka").onclick = function () {
         number = 0;
         autoTatarkaCount = 0;
         autoTatarkaCost = 500;
-        clickBoost *= 100;
+        clickBoost *= 10;
         tatarkaBoostCost = 50;
         curency = 0;
 
