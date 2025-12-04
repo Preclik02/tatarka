@@ -6,6 +6,8 @@ let clickBoost = 1;
 let tatarkaBoostCost = 50;
 let goldenTatarkaCost = 1000000000000; // Initial rebirth cost
 
+let autoTatarkaInterval;
+
 window.onload = function () {
     let savedNumber = localStorage.getItem("number");
     let savedCurency = localStorage.getItem("curency");
@@ -15,18 +17,15 @@ window.onload = function () {
     let savedTatarkaBoostCost = localStorage.getItem("tatarkaBoostCost");
     let savedGoldenTatarkaCost = localStorage.getItem("goldenTatarkaCost");
 
-    if (savedNumber !== null) number = parseInt(savedNumber);
-    if (savedCurency !== null) curency = parseInt(savedCurency);
-    if (savedAutoTatarkaCount !== null) autoTatarkaCount = parseInt(savedAutoTatarkaCount);
-    if (savedAutoTatarkaCost !== null) autoTatarkaCost = parseInt(savedAutoTatarkaCost);
-    if (savedClickBoost !== null) clickBoost = parseInt(savedClickBoost);
-    if (savedTatarkaBoostCost !== null) tatarkaBoostCost = parseInt(savedTatarkaBoostCost);
-    if (savedGoldenTatarkaCost !== null) goldenTatarkaCost = parseInt(savedGoldenTatarkaCost);
+    if (savedNumber !== null) number = Number(savedNumber);
+    if (savedCurency !== null) curency = Number(savedCurency);
+    if (savedAutoTatarkaCount !== null) autoTatarkaCount = Number(savedAutoTatarkaCount);
+    if (savedAutoTatarkaCost !== null) autoTatarkaCost = Number(savedAutoTatarkaCost);
+    if (savedClickBoost !== null) clickBoost = Number(savedClickBoost);
+    if (savedTatarkaBoostCost !== null) tatarkaBoostCost = Number(savedTatarkaBoostCost);
+    if (savedGoldenTatarkaCost !== null) goldenTatarkaCost = Number(savedGoldenTatarkaCost);
 
-    for (let i = 0; i < autoTatarkaCount; i++) {
-        startAutoTatarka();
-    }
-
+    startAutoTatarka();
     updateUI();
 };
 
@@ -47,10 +46,12 @@ document.getElementById("add").onclick = function () {
     saveProgress();
 };
 
-// Auto Tatarka now gives +10 per second instead of +1
+// Single interval, adds total autoTatarkaCount * 25 per second
 function startAutoTatarka() {
-    setInterval(function () {
-        curency += 25; // Increased auto value from 1 to 10
+    if (autoTatarkaInterval) clearInterval(autoTatarkaInterval);
+
+    autoTatarkaInterval = setInterval(function () {
+        curency += autoTatarkaCount * 25;
         updateUI();
         saveProgress();
     }, 1000);
@@ -60,9 +61,9 @@ document.getElementById("auto_tatarka").onclick = function () {
     if (curency >= autoTatarkaCost) {
         curency -= autoTatarkaCost;
         autoTatarkaCount++;
-        autoTatarkaCost *= 3; // Cost increases
+        autoTatarkaCost *= 3;
 
-        startAutoTatarka();
+        startAutoTatarka(); // Restart interval with new count
         updateUI();
         saveProgress();
     }
@@ -79,13 +80,12 @@ document.getElementById("tatarka_boost").onclick = function () {
     }
 };
 
-// Golden Tatarka (Rebirth) - Can be rebought, cost increases by 1 trillion each time
 document.getElementById("golden_tataka").onclick = function () {
     if (curency >= goldenTatarkaCost) {
         curency -= goldenTatarkaCost;
-        goldenTatarkaCost += 100000000000000; // Increase cost by 1 trillion
+        goldenTatarkaCost += 100000000000000; // Increase cost by 100 trillion
 
-        // Reset all values but keep increasing click power
+        // Reset all except clickBoost (which increases)
         number = 0;
         autoTatarkaCount = 0;
         autoTatarkaCost = 500;
@@ -93,16 +93,17 @@ document.getElementById("golden_tataka").onclick = function () {
         tatarkaBoostCost = 50;
         curency = 0;
 
+        startAutoTatarka(); // Reset auto interval with zero count
         updateUI();
         saveProgress();
-        location.reload();
+
         alert(`You've purchased Golden Tatarka! Your click boost is now ${clickBoost}×, and the next one costs ${goldenTatarkaCost}!`);
+        // No reload needed
     } else {
         alert(`You need ${goldenTatarkaCost} Tatarek to purchase Golden Tatarka!`);
     }
 };
 
-// Reset Button: Clears **everything** including rebirths
 document.getElementById("reset").onclick = function () {
     number = 0;
     curency = 0;
@@ -110,10 +111,11 @@ document.getElementById("reset").onclick = function () {
     autoTatarkaCost = 500;
     clickBoost = 1;
     tatarkaBoostCost = 50;
-    goldenTatarkaCost = 1000000000000; // Reset rebirth cost
+    goldenTatarkaCost = 1000000000000;
 
-    localStorage.clear(); // Clear all saved progress
+    localStorage.clear();
 
+    startAutoTatarka(); // Reset auto interval
     updateUI();
     alert("Game progress has been reset!");
 };
@@ -125,4 +127,3 @@ function updateUI() {
     document.getElementById("tatarka_boost").textContent = `Tatarka Booster (Cost: ${tatarkaBoostCost})`;
     document.getElementById("golden_tataka").textContent = `GOLDEN TATARKA (Cost: ${goldenTatarkaCost})`;
 }
-
