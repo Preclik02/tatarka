@@ -95,6 +95,7 @@ document.getElementById("golden_tataka").onclick = function () {
 
         updateUI();
         saveProgress();
+        location.reload();
         alert(`You've purchased Golden Tatarka! Your click boost is now ${clickBoost}×, and the next one costs ${goldenTatarkaCost}!`);
     } else {
         alert(`You need ${goldenTatarkaCost} Tatarek to purchase Golden Tatarka!`);
@@ -124,3 +125,4 @@ function updateUI() {
     document.getElementById("tatarka_boost").textContent = `Tatarka Booster (Cost: ${tatarkaBoostCost})`;
     document.getElementById("golden_tataka").textContent = `GOLDEN TATARKA (Cost: ${goldenTatarkaCost})`;
 }
+
